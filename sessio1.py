@@ -1,9 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.animation as animation
+from mpl_toolkits.mplot3d import Axes3D
 import numfor as nf
-from copy import copy
 from datetime import datetime
 
 def complex_fun(x):
@@ -15,22 +14,26 @@ a  = 3
 n  = 1000
 k0 = 30
 
-w  = 1.0
 x0 =-3.0
 m  = 50
+L=5
 V = np.zeros(n)
 V[int(n/2):]=high
-L=5
 x=np.linspace(-L,L,n)
 dx=(2*L)/n
 dt=0.5/(2/(m*dx**2)+np.max(V))
-# dt=1.e-3
 t = 0.0
-psi=np.array(complex_fun(x), order='F')
-psi[0] =0
-psi[-1]=0
-psi_old = copy(psi)
+psi=complex_fun(x) ; psi_old = complex_fun(x)
 freq = np.fft.fftshift(np.fft.fftfreq(n)*(2*np.pi/dx))
+
+fig = plt.figure(dpi=200)
+ax = fig.gca(projection='3d')
+ax.set_xlim(-4.5,-1.5)
+ax.plot(x, np.real(psi), np.imag(psi), label='$\Psi$')
+plt.tight_layout()
+plt.savefig('plot3d.png')
+plt.close()
+
 
 fig, axs = plt.subplots(2, figsize=(5,5))
 fig.set(dpi=170)
@@ -41,7 +44,7 @@ axs[0].plot(x, V/max(V), 'r-')
 abs_line,  = axs[0].plot(x, x, 'k-', label='Probability')
 real_line, = axs[0].plot(x, x, lw=1, label='Real')
 imag_line, = axs[0].plot(x, x, lw=1, label='Imaginary')
-fft_line, = axs[1].plot(freq, freq)
+fft_line,  = axs[1].plot(freq, freq)
 title_text = axs[0].text(0.02, 0.92, '', transform=axs[0].transAxes)
 norm_text = axs[0].text(0.02, 0.84, '', transform=axs[0].transAxes)
 axs[0].legend(ncol=3, loc=8)
@@ -59,16 +62,17 @@ def animate(i):
     imag_line.set_ydata(np.imag(psi))
     abs_line.set_ydata(prob)
     fft_line.set_ydata(fft)
-    title_text.set_text(('Time: %.4f' % t))
-    norm_text.set_text(('Norma: %.4f' % norm))
+    title_text.set_text(('Time: %.3f' % t))
+    norm_text.set_text(('Norma: %.3f' % norm))
     return real_line, imag_line, abs_line, fft_line, title_text, norm_text
+for i in range(500): animate(0)
+plt.savefig('screenshot.png')
 
+ani = animation.FuncAnimation(fig, animate, frames=100, interval=0, blit=True, repeat=True)
+plt.show()
 
-
-# ani = animation.FuncAnimation(fig, animate, frames=100, interval=0, blit=True, repeat=True)
-# plt.show()
-
-print(datetime.now())
-ani = animation.FuncAnimation(fig, animate, frames=100, blit=True, repeat=False)
-ani.save('entrega.gif', writer='imagemagick', fps=30)
-print(datetime.now())
+# print(datetime.now())
+# plt.rcParams['animation.ffmpeg_path'] = r'C:\Program Files\ffmpeg\bin\ffmpeg.exe'
+# ani = animation.FuncAnimation(fig, animate, frames=1000, blit=True, repeat=False)
+# ani.save('entrega.mp4', writer='ffmpeg', fps=30)
+# print(datetime.now())
