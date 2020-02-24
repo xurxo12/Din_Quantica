@@ -4,7 +4,7 @@ subroutine Euler_B(psi, psi_old, n, steps, V, dt, m, dx)
   double complex :: constant
   real(8), dimension(n) :: V
   real(8) :: dt, m, dx
-  constant = cmplx(0,1)*dt/(2*m*dx**2)
+  constant = cmplx(0,2)*dt/(2*m*dx**2)
   ! constant2 = dt
 
   do i=1,steps
@@ -28,7 +28,7 @@ subroutine Euler(psi, n, steps, V, dt, m, dx)
   real(8) :: dt, m, dx
 
   do i=1,steps
-    psi(2:n-1) = psi(2:n-1)+cmplx(0,1)*dt/(2*m*dx**2)*(psi(:n-2)+psi(3:)-2*psi(2:n-1))-cmplx(0,dt)*V(2:n-1)*psi(2:n-1)
+    psi(2:n-1) = psi(2:n-1)+cmplx(0,dt)/(2*m*dx**2)*(psi(:n-2)+psi(3:)-2*psi(2:n-1))-cmplx(0,dt)*V(2:n-1)*psi(2:n-1)
   end do
 
 end subroutine
