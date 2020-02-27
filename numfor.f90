@@ -9,8 +9,8 @@ subroutine Euler_B(psi, psi_old, n, steps, V, dt, m, dx)
 
   do i=1,steps
 
-    psi_new(1)=0
-    psi_new(n)=0
+    psi_new(1)=psi_old(1)+constant*(psi(n)+psi(2)-2*psi(1))-cmplx(0,dt)*V(1)*psi(1)
+    psi_new(n)=psi_old(n)+constant*(psi(n-1)+psi(1)-2*psi(n))-cmplx(0,dt)*V(n)*psi(n)
     psi_new(2:n-1) = psi_old(2:n-1)+constant*(psi(:n-2)+psi(3:)-2*psi(2:n-1))-cmplx(0,dt)*V(2:n-1)*psi(2:n-1)
 
     psi_old = psi
