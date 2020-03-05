@@ -1,5 +1,5 @@
-subroutine Euler_B(psi, psi_old, n, steps, V, dt, m, dx)
-  integer :: n, steps
+subroutine Euler_B(psi, psi_old, n, steps, V, dt, m, dx, BC)
+  integer :: n, steps, BC
   double complex, dimension(n) :: psi, psi_old, psi_new
   double complex :: constant
   real(8), dimension(n) :: V
@@ -9,8 +9,17 @@ subroutine Euler_B(psi, psi_old, n, steps, V, dt, m, dx)
 
   do i=1,steps
 
-    psi_new(1)=psi_old(1)+constant*(psi(n)+psi(2)-2*psi(1))-cmplx(0,dt)*V(1)*psi(1)
-    psi_new(n)=psi_old(n)+constant*(psi(n-1)+psi(1)-2*psi(n))-cmplx(0,dt)*V(n)*psi(n)
+    if (BC==0) then
+      psi_new(1)=psi_old(1)+constant*(psi(n)+psi(2)-2*psi(1))-cmplx(0,dt)*V(1)*psi(1)
+      psi_new(n)=psi_old(n)+constant*(psi(n-1)+psi(1)-2*psi(n))-cmplx(0,dt)*V(n)*psi(n)
+    else if (BC==1) then
+      psi_new(1)=cmplx(0.d0,0.d0)
+      psi_new(n)=cmplx(0.d0,0.d0)
+    else if (BC==2) then
+      psi_new(1)=psi_new(2)
+      psi_new(n)=psi_new(n-1)
+    end if
+
     psi_new(2:n-1) = psi_old(2:n-1)+constant*(psi(:n-2)+psi(3:)-2*psi(2:n-1))-cmplx(0,dt)*V(2:n-1)*psi(2:n-1)
 
     psi_old = psi
