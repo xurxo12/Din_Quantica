@@ -20,7 +20,7 @@ subroutine Euler_B(psi, psi_old, n, steps, V, dt, m, dx, BC)
       psi_new(n)=psi_new(n-1)
     end if
 
-    psi_new(2:n-1) = psi_old(2:n-1)+constant*(psi(:n-2)+psi(3:)-2*psi(2:n-1))-cmplx(0,dt)*V(2:n-1)*psi(2:n-1)
+    psi_new(2:n-1) = psi_old(2:n-1)+constant*(psi(:n-2)+psi(3:)-2*psi(2:n-1))-cmplx(0,2.d0*dt)*V(2:n-1)*psi(2:n-1)
 
     psi_old = psi
     psi = psi_new

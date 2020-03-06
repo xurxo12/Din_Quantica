@@ -12,12 +12,12 @@ def R():
     return np.sum(prob[:int(n/2)])*dx
 
 def T():
-    return np.sum(prob[int(n/2)+ample:])*dx
+    return np.sum(prob[int(n/2):])*dx
 
 # high = float(input('Alçada de la barrera de potencial ( de l.ordre de 15.0)? '))
 # BC = int(input('Condicions de contorn periòdiques (0), potencial infinit (1) o obertes (2) ? '))
 BC=1
-a = 3
+a = 5
 n = 1000
 k = 20
 w = 2
@@ -27,19 +27,18 @@ L=5
 x0 =-L/2
 E = k**2/(2*m)
 V = np.zeros(n)
-ample=int(n/20)
+ample=ample=int(0.5*(n/2)/20)
 x=np.linspace(-L,L,n)
 dx=(2*L)/(n-1)
 dt=0.5/(2/(m*dx**2)+np.max(V))
 
 R_arr=np.empty(50)
 T_arr=np.empty(50)
-alcada = np.linspace(0,2.5,50)*E
+alcada = np.linspace(0,1.5,50)*E
 for i in range(50):
     psi=psi_0(x) ; psi_old = psi_0(x)
-    V[int(n/2):int(n/2)+ample]=alcada[i]
-    for _ in range(350):
-        nf.euler_b(psi=psi, psi_old=psi_old, steps=30, dt=dt, m=m, v=V, dx=dx, bc=BC)
+    V[int(n/2)-ample:int(n/2)+ample]=alcada[i]
+    nf.euler_b(psi=psi, psi_old=psi_old, steps=13000, dt=dt, m=m, v=V, dx=dx, bc=BC)
     prob = np.abs(psi)**2
     R_arr[i]=R()
     T_arr[i]=T()
