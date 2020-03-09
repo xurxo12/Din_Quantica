@@ -44,8 +44,9 @@ for i in range(50):
 plt.figure()
 plt.plot(alcada,R_arr, 'C0.-', label='R')
 plt.plot(alcada,T_arr, 'C1.-', label='T')
+plt.xlabel(r'Energia de la barrera partit per $\frac{k^2}{2m}$')
 plt.legend()
-plt.show()
+plt.savefig('barrera_energia.png')
 
 
 # fig, axs = plt.subplots(1, figsize=(6,6))

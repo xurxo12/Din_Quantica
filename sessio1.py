@@ -75,7 +75,7 @@ def animate(i):
     norm_text.set_text(('Norma: %.3f' % norm))
     return real_line, imag_line, abs_line, fft_line, title_text, norm_text, anal_line,
 
-ani = animation.FuncAnimation(fig, animate, frames=100, interval=0, blit=True, repeat=True)
+ani = animation.FuncAnimation(fig, animate, frames=100, interval=10, blit=True, repeat=True)
 plt.show()
 
 # print(datetime.now())

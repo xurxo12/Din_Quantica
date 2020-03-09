@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-from mpl_toolkits.mplot3d import Axes3D
 import numfor as nf
 from datetime import datetime
 
@@ -35,13 +34,13 @@ t = 0.0
 sig = np.sqrt(2)/a
 psi=psi_0(x) ; psi_old = psi_0(x)
 freq = np.fft.fftshift(np.fft.fftfreq(n)*(2*np.pi/dx))
-
+fft = np.abs(np.fft.fftshift(np.fft.fft(psi, norm="ortho")))**2
 
 
 fig, axs = plt.subplots(2, figsize=(6,6))
 # fig.set(dpi=150)
 axs[0].set(xlim=(-L, L), ylim=(-1.2*(a**2/(2*np.pi))**(1/4), 1.2*(a**2/(2*np.pi))**(1/4)), xlabel='x', ylabel='$\Psi$')
-axs[1].set(xlim=(-40,40),  ylim=(0,15), xlabel='k', ylabel='FFT')
+axs[1].set(xlim=(freq[0],freq[-1]),  ylim=(0,2*np.max(fft)), xlabel='k', ylabel='FFT')
 
 axs[0].plot(x, V/max(V), 'r-')
 real_line, = axs[0].plot(x, x, lw=1, label='Real')
@@ -71,7 +70,9 @@ def animate(i):
                        (" Norma=%.3f" % norm))
     return real_line, imag_line, abs_line, fft_line, title_text, norm_text,
 
-ani = animation.FuncAnimation(fig, animate, frames=350, interval=0, blit=True, repeat=True)
+ani = animation.FuncAnimation(fig, animate, frames=350, interval=10, blit=True, repeat=True)
+
+# plt.draw()
 plt.show()
 
 # print(datetime.now())
