@@ -28,7 +28,6 @@ E = k**2/(2*m)
 V = np.zeros(n)
 dx=(2*L)/(n-1)
 ample=int(0.5*(n/2)/20)
-print(ample)
 V[int(n/2)-ample:int(n/2)+ample]=E*1.5
 x=np.linspace(-L,L,n)
 dt=0.5/(2/(m*dx**2)+np.max(V))
@@ -50,13 +49,14 @@ imag_line, = axs[0].plot(x, x, lw=1, label='Imaginary')
 abs_line,  = axs[0].plot(x, x, 'k-', label='Probability')
 fft_line,  = axs[1].plot(freq, freq)
 title_text = axs[0].text(0.02, 0.92, '', transform=axs[0].transAxes)
-norm_text = axs[0].text(0.02, 0.84, '', transform=axs[0].transAxes)
+norm_text  = axs[0].text(0.02, 0.84, '', transform=axs[0].transAxes)
 axs[0].legend(ncol=3, loc=8)
 plt.tight_layout()
 
 def animate(i):
     global t, prob
-    nf.euler_b(psi=psi, psi_old=psi_old, steps=30, dt=dt, m=m, v=V, dx=dx, bc=BC)
+    # nf.euler_b(psi=psi, psi_old=psi_old, steps=30, dt=dt, m=m, v=V, dx=dx, bc=BC)
+    nf.euler_rk4(psi=psi, n=n, steps=30, dt=dt, m=m, v=V, dx=dx)
     t += 30*dt
     fft = np.abs(np.fft.fftshift(np.fft.fft(psi, norm="ortho")))**2
     prob = np.abs(psi)**2

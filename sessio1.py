@@ -59,7 +59,7 @@ plt.tight_layout()
 
 def animate(i):
     global t
-    nf.euler_b(psi=psi, psi_old=psi_old, steps=30, dt=dt, m=m, v=V, dx=dx)
+    nf.euler_b(psi=psi, psi_old=psi_old, steps=30, dt=dt, m=m, v=V, dx=dx, bc=1)
     # nf.euler(psi=psi, steps=20, dt=dt, m=m, v=V, dx=dx)
     t += 30*dt
     fft = np.abs(np.fft.fftshift(np.fft.fft(psi, norm="ortho")))**2

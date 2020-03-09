@@ -5,7 +5,6 @@ subroutine Euler_B(psi, psi_old, n, steps, V, dt, m, dx, BC)
   real(8), dimension(n) :: V
   real(8) :: dt, m, dx
   constant = cmplx(0,2)*dt/(2*m*dx**2)
-  ! constant2 = dt
 
   do i=1,steps
 
@@ -24,6 +23,49 @@ subroutine Euler_B(psi, psi_old, n, steps, V, dt, m, dx, BC)
 
     psi_old = psi
     psi = psi_new
+
+  end do
+
+end subroutine
+
+subroutine Euler_RK4(psi, n, steps, V, dt, m, dx)
+  implicit none
+  integer :: n, steps, i
+  double complex, dimension(n) :: psi
+  double complex, dimension(n-2) :: Psi_temp, k1, k2, k3, k4
+  real(8), dimension(n) :: V
+  real(8) :: dt, m, dx
+
+  Psi_temp(1) = cmplx(0,0.d0)
+  Psi_temp(n) = cmplx(0,0.d0)
+  write(*,*) 'hello world!'
+  write(*,*) dt
+  write(*,*) V(1), 'avere'
+  write(*,*) Psi_temp(1)
+  do i=1,steps
+
+    write(*,*) cmplx(3,dt)
+    write(*,*) psi(n/4)
+
+    k1 = cmplx(0,dt)*((psi(:n-2)+psi(3:)-2*psi(2:n-1))/(2*m*dx**2)-V(2:n-1)*psi(2:n-1))
+    !
+    ! Psi_temp(2:n-1) = Psi(2:n-1) + 0.5d0*k1
+    !
+    ! k2 = cmplx(0,dt)*((Psi_temp(:n-2)+Psi_temp(3:)-2*Psi_temp(2:n-1))/(2*m*dx**2)-V(2:n-1)*Psi_temp(2:n-1))
+    !
+    ! Psi_temp(2:n-1) = Psi(2:n-1) + 0.5d0*k2
+    !
+    ! k3 = cmplx(0,dt)*((Psi_temp(:n-2)+Psi_temp(3:)-2*Psi_temp(2:n-1))/(2*m*dx**2)-V(2:n-1)*Psi_temp(2:n-1))
+    !
+    ! Psi_temp(2:n-1) = Psi(2:n-1) + k3
+    !
+    ! k4 = cmplx(0,dt)*((Psi_temp(:n-2)+Psi_temp(3:)-2*Psi_temp(2:n-1))/(2*m*dx**2)-V(2:n-1)*Psi_temp(2:n-1))
+
+    k2 = 0.d0
+    k3 = 0.d0
+    k4 = 0.d0
+
+    psi(2:n-1) = psi(2:n-1)+(k1+2.d0*k2+3.d0*k3+k4)/6.d0
 
   end do
 
