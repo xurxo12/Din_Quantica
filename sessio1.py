@@ -26,19 +26,19 @@ V = np.zeros(n)
 V[int(2*n/3):]=E*2*0
 x=np.linspace(-L,L,n)
 dx=(2*L)/(n-1)
-dt=0.5/(2/(m*dx**2)+np.max(V))
+dt=2/(2/(m*dx**2)+np.max(V))
 t = 0.0
 sig = np.sqrt(2)/a
 psi=psi_0(x) ; psi_old = psi_0(x)
 freq = np.fft.fftshift(np.fft.fftfreq(n)*(2*np.pi/dx))
 
-fig = plt.figure(dpi=200)
-ax = fig.gca(projection='3d')
-ax.set_xlim(-4.5,-1.5)
-ax.plot(x, np.real(psi), np.imag(psi), label='$\Psi$')
-plt.tight_layout()
-plt.savefig('plot3d.png')
-plt.close()
+# fig = plt.figure(dpi=200)
+# ax = fig.gca(projection='3d')
+# ax.set_xlim(-4.5,-1.5)
+# ax.plot(x, np.real(psi), np.imag(psi), label='$\Psi$')
+# plt.tight_layout()
+# plt.savefig('plot3d.png')
+# plt.close()
 
 
 fig, axs = plt.subplots(2, figsize=(6,6))
@@ -50,7 +50,7 @@ axs[0].plot(x, V/max(V), 'r-')
 real_line, = axs[0].plot(x, x, lw=1, label='Real')
 imag_line, = axs[0].plot(x, x, lw=1, label='Imaginary')
 abs_line,  = axs[0].plot(x, x, 'k-', label='Probability')
-anal_line, = axs[0].plot(x, x, 'k:', label='Analytic')
+# anal_line, = axs[0].plot(x, x, 'k:', label='Analytic')
 fft_line,  = axs[1].plot(freq, freq)
 title_text = axs[0].text(0.02, 0.92, '', transform=axs[0].transAxes)
 norm_text = axs[0].text(0.02, 0.84, '', transform=axs[0].transAxes)
@@ -59,7 +59,8 @@ plt.tight_layout()
 
 def animate(i):
     global t
-    nf.euler_b(psi=psi, psi_old=psi_old, steps=30, dt=dt, m=m, v=V, dx=dx, bc=1)
+    # nf.euler_b(psi=psi, psi_old=psi_old, steps=30, dt=dt, m=m, v=V, dx=dx, bc=1)
+    nf.euler_rk4(psi=psi, n=n, steps=30, dt=dt, m=m, v=V, dx=dx)
     # nf.euler(psi=psi, steps=20, dt=dt, m=m, v=V, dx=dx)
     t += 30*dt
     fft = np.abs(np.fft.fftshift(np.fft.fft(psi, norm="ortho")))**2
@@ -69,11 +70,11 @@ def animate(i):
     real_line.set_ydata(np.real(psi))
     imag_line.set_ydata(np.imag(psi))
     abs_line.set_ydata(prob)
-    anal_line.set_ydata(np.abs(psi_t(x,t)+psi_t(x+2*L,t)+psi_t(x+4*L,t))**2)
+    # anal_line.set_ydata(np.abs(psi_t(x,t)+psi_t(x+2*L,t)+psi_t(x+4*L,t))**2)
     fft_line.set_ydata(fft)
     title_text.set_text(('Time: %.3f' % t))
-    norm_text.set_text(('Norma: %.3f' % norm))
-    return real_line, imag_line, abs_line, fft_line, title_text, norm_text, anal_line,
+    norm_text.set_text(('Norma: %.5f' % norm))
+    return real_line, imag_line, abs_line, fft_line, title_text, norm_text,# anal_line,
 
 ani = animation.FuncAnimation(fig, animate, frames=100, interval=10, blit=True, repeat=True)
 plt.show()

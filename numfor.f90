@@ -43,21 +43,23 @@ subroutine Euler_RK4(psi, n, steps, V, dt, m, dx)
   Psi_temp(n) = cmplx(0)
   do i=1,steps
 
-    k1 = ii*dt*((Psi(:n-2)+Psi(3:)-2*Psi(2:n-1))/(2*m*dx**2)-V(2:n-1)*Psi(2:n-1))
+    k1 = ii*dt*((Psi(:n-2)+Psi(3:)-2.d0*Psi(2:n-1))/(2.d0*m*dx**2)-V(2:n-1)*Psi(2:n-1))
 
-    Psi_temp(2:n-1) = Psi(2:n-1) + 0.5*k1
+    Psi_temp(2:n-1) = Psi(2:n-1) + 0.5d0*k1
 
-    k2 = ii*dt*((Psi_temp(:n-2)+Psi_temp(3:)-2*Psi_temp(2:n-1))/(2*m*dx**2)-V(2:n-1)*Psi_temp(2:n-1))
+    k2 = ii*dt*((Psi_temp(:n-2)+Psi_temp(3:)-2.d0*Psi_temp(2:n-1))/(2.d0*m*dx**2)-V(2:n-1)*Psi_temp(2:n-1))
 
-    Psi_temp(2:n-1) = Psi(2:n-1) + 0.5*k2
+    Psi_temp(2:n-1) = Psi(2:n-1) + 0.5d0*k2
 
-    k3 = ii*dt*((Psi_temp(:n-2)+Psi_temp(3:)-2*Psi_temp(2:n-1))/(2*m*dx**2)-V(2:n-1)*Psi_temp(2:n-1))
+    k3 = ii*dt*((Psi_temp(:n-2)+Psi_temp(3:)-2.d0*Psi_temp(2:n-1))/(2.d0*m*dx**2)-V(2:n-1)*Psi_temp(2:n-1))
 
     Psi_temp(2:n-1) = Psi(2:n-1) + k3
 
-    k4 = ii*dt*((Psi_temp(:n-2)+Psi_temp(3:)-2*Psi_temp(2:n-1))/(2*m*dx**2)-V(2:n-1)*Psi_temp(2:n-1))
+    k4 = ii*dt*((Psi_temp(:n-2)+Psi_temp(3:)-2.d0*Psi_temp(2:n-1))/(2.d0*m*dx**2)-V(2:n-1)*Psi_temp(2:n-1))
 
     psi(2:n-1) = psi(2:n-1)+(k1+2.d0*k2+2.d0*k3+k4)/6.d0
+    ! Psi(1) = cmplx(0)
+    ! Psi(n) = cmplx(0)
   end do
 
 end subroutine
