@@ -29,7 +29,9 @@ dx=(2*L)/(n-1)
 ample=int(0.5*(n/2)/20)
 V[int(n/2)-ample:int(n/2)+ample]=E*1.0
 x=np.linspace(-L,L,n)
-dt=1/(2/(m*dx**2)+np.max(V))
+# dt=0.5/(2/(m*dx**2)+np.max(V))
+# print('dt =', dt)
+dt=1.e-4
 t = 0.0
 sig = np.sqrt(2)/a
 psi=psi_0(x) ; psi_old = psi_0(x)
@@ -54,7 +56,7 @@ plt.tight_layout()
 
 def animate(i):
     global t, prob
-    # nf.euler_b(psi=psi, psi_old=psi_old, steps=30, dt=dt, m=m, v=V, dx=dx, bc=BC)
+    # nf.euler(psi=psi, psi_old=psi_old, steps=30, dt=dt, m=m, v=V, dx=dx, bc=BC)
     nf.euler_rk4(psi=psi, steps=30, dt=dt, m=m, v=V, dx=dx)
     t += 30*dt
     fft  = np.abs(np.fft.fftshift(np.fft.fft(psi, norm="ortho")))**2
@@ -67,7 +69,7 @@ def animate(i):
     title_text.set_text(('Time: %.3f' % t))
     norm_text.set_text(("R={0:.0%}".format(R()))+
                       (" T={0:.0%}".format(T()))+
-                      (" Norma=%.3f" % norm))
+                      (" Norma=%.8f" % norm))
     return real_line, imag_line, abs_line, fft_line, title_text, norm_text,
 
 ani = animation.FuncAnimation(fig, animate, frames=350, interval=10, blit=True, repeat=True)

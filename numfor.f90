@@ -64,6 +64,48 @@ subroutine Euler_RK4(psi, n, steps, V, dt, m, dx)
 
 end subroutine
 
+subroutine Euler_RK4_3D(psi, n, steps, dt, m, dx)
+  implicit none
+  integer :: n, steps, i
+  complex(8), dimension(n, n) :: psi , Psi_temp
+  complex(8), dimension(n-2, n-2) :: k1 , k2, k3, k4
+  complex(8) :: ii
+  ! real(8), dimension(n, v) :: V
+  !f2py intent(inout) :: psi
+  real(8) :: dt, m, dx
+  ii = cmplx(0,1)
+
+  Psi_temp(1,:) = cmplx(0)
+  Psi_temp(n,:) = cmplx(0)
+  Psi_temp(:,1) = cmplx(0)
+  Psi_temp(:,n) = cmplx(0)
+
+  do i=1,steps
+
+    k1 = ii*dt*(Psi(2:n-1,:n-2)+Psi(2:n-1,3:)-2.d0*Psi(2:n-1,2:n-1) +&
+                Psi(:n-2,2:n-1)+Psi(3:,2:n-1)-2.d0*Psi(2:n-1,2:n-1))/(2.d0*m*dx**2)
+
+    Psi_temp(2:n-1, 2:n-1) = Psi(2:n-1, 2:n-1) + 0.5d0*k1
+
+    k2 = ii*dt*(Psi_temp(2:n-1,:n-2)+Psi_temp(2:n-1,3:)-2.d0*Psi_temp(2:n-1,2:n-1)+&
+                Psi_temp(:n-2,2:n-1)+Psi_temp(3:,2:n-1)-2.d0*Psi_temp(2:n-1,2:n-1))&
+                /(2.d0*m*dx**2)
+
+    Psi_temp(2:n-1, 2:n-1) = Psi(2:n-1, 2:n-1) + 0.5d0*k2
+
+    k3 = ii*dt*(Psi_temp(2:n-1,:n-2)+Psi_temp(2:n-1,3:)-2.d0*Psi_temp(2:n-1,2:n-1)+&
+                Psi_temp(:n-2,2:n-1)+Psi_temp(3:,2:n-1)-2.d0*Psi_temp(2:n-1,2:n-1))&
+                /(2.d0*m*dx**2)
+
+    Psi_temp(2:n-1, 2:n-1) = Psi(2:n-1, 2:n-1) + k3
+
+    k4 = ii*dt*(Psi_temp(2:n-1,:n-2)+Psi_temp(2:n-1,3:)-2.d0*Psi_temp(2:n-1,2:n-1)+&
+                Psi_temp(:n-2,2:n-1)+Psi_temp(3:,2:n-1)-2.d0*Psi_temp(2:n-1,2:n-1))&
+                /(2.d0*m*dx**2)
+
+    psi(2:n-1, 2:n-1) = psi(2:n-1, 2:n-1)+(k1+2.d0*k2+2.d0*k3+k4)/6.d0
+  end do
+end subroutine
 
 subroutine Euler(psi, n, steps, V, dt, m, dx)
   integer :: n, steps
