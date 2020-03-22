@@ -1,4 +1,6 @@
 import numpy as np
+import matplotlib
+# matplotlib.use('agg')
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import numfor as nf
@@ -31,7 +33,7 @@ psi=np.array(psi_0(X, Y), order='F')
 psi /= np.sqrt(np.sum(np.abs(psi)**2)*dx**2)
 
 
-fig, ax = plt.subplots(1)
+fig, ax = plt.subplots(1, dpi=300)
 surf = ax.imshow( np.abs(psi)**2, cmap='inferno')
 title_text = ax.text(0.02, 0.92, '', transform=ax.transAxes, color='w')
 norm_text  = ax.text(0.02, 0.85, '', transform=ax.transAxes, color='w')
@@ -47,6 +49,7 @@ def animate(i):
     norm_text.set_text((" Norma=%.5f" % (np.sum(prob)*dx**2)))
     return surf, title_text, norm_text
 
-ani = animation.FuncAnimation(fig, animate, frames=350, interval=1, blit=True, repeat=True)
+ani = animation.FuncAnimation(fig, animate, frames=350, interval=20, blit=True, repeat=True)
 
 plt.show()
+# ani.save('entrega.mp4')
