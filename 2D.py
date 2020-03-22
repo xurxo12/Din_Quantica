@@ -7,23 +7,22 @@ def psi_0(x,y):
     return (a**2/(2*np.pi))**(1/4)*np.exp(-0.25*a**2*((x-x0)**2+(y-y0)**2))*np.exp(1j*(kx*x+ky*y))
 
 BC = 1
-a  = 1
+a  = 3
 n  = 250
 kx = 0
-ky = 40
+ky = -40
 steps=20
 
 m  = 1
 L  = 10
 x0 = 0.0
-y0 = 0.0
-E = (kx**2+ky**2)/(2*m)
+y0 = 3.0
+E = np.sqrt(kx**2+ky**2)/(2*m)
 V = np.zeros((n,n))
-dx=(2*L)/(n-1)
-ample=int(0.5*(n/2)/20)
-x=np.linspace(-L,L,n)
-y=np.linspace(-L,L,n)
-dt=1.e-3
+V[int(n/2)-50:int(n/2)-45,int(n/2)-5:int(n/2)+5] = 10*E
+print(E)
+dx=L/(n-1)
+dt=2.e-4
 t = 0.0
 X = np.linspace(-L/2, L/2, n)
 Y = np.linspace(-L/2, L/2, n)
@@ -40,7 +39,7 @@ ax.set_xticks([]) ; ax.set_yticks([]) ; plt.tight_layout()
 
 def animate(i):
     global t, prob
-    nf.euler_rk4_3d(psi=psi, steps=steps, dt=dt, m=m, dx=dx)
+    nf.euler_rk4_3d(psi=psi, steps=steps, v=V, dt=dt, m=m, dx=dx)
     t += steps*dt
     prob = np.abs(psi)**2
     surf.set_data(prob)

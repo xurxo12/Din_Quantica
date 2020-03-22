@@ -56,8 +56,8 @@ plt.tight_layout()
 
 def animate(i):
     global t, prob
-    # nf.euler(psi=psi, psi_old=psi_old, steps=30, dt=dt, m=m, v=V, dx=dx, bc=BC)
-    nf.euler_rk4(psi=psi, steps=30, dt=dt, m=m, v=V, dx=dx)
+    nf.euler_b(psi=psi, psi_old=psi_old, steps=30, dt=dt, m=m, v=V, dx=dx)
+    # nf.euler_rk4(psi=psi, steps=30, dt=dt, m=m, v=V, dx=dx)
     t += 30*dt
     fft  = np.abs(np.fft.fftshift(np.fft.fft(psi, norm="ortho")))**2
     prob = np.abs(psi)**2
