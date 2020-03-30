@@ -6,14 +6,14 @@ import matplotlib.animation as animation
 import numfor as nf
 
 def psi_0(x,y):
-    return (a**2/(2*np.pi))**(1/4)*np.exp(-0.25*a**2*((x-x0)**2+(y-y0)**2))*np.exp(1j*(kx*x+ky*y))
+    return np.exp(-0.25*a**2*((x-x0)**2+(y-y0)**2)+1j*(kx*x+ky*y))
 
 BC = 1
 a  = 3
 n  = 250
 kx = 0
 ky = -40
-steps=20
+steps=10
 
 m  = 1
 L  = 10
@@ -33,7 +33,7 @@ psi=np.array(psi_0(X, Y), order='F')
 psi /= np.sqrt(np.sum(np.abs(psi)**2)*dx**2)
 
 
-fig, ax = plt.subplots(1, dpi=300)
+fig, ax = plt.subplots(1, dpi=150)
 surf = ax.imshow( np.abs(psi)**2, cmap='inferno')
 title_text = ax.text(0.02, 0.92, '', transform=ax.transAxes, color='w')
 norm_text  = ax.text(0.02, 0.85, '', transform=ax.transAxes, color='w')
@@ -49,7 +49,7 @@ def animate(i):
     norm_text.set_text((" Norma=%.5f" % (np.sum(prob)*dx**2)))
     return surf, title_text, norm_text
 
-ani = animation.FuncAnimation(fig, animate, frames=350, interval=20, blit=True, repeat=True)
+ani = animation.FuncAnimation(fig, animate, frames=400, interval=20, blit=True, repeat=False)
 
 plt.show()
-# ani.save('entrega.mp4')
+# ani.save('video2D.mp4')
